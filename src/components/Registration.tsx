@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
@@ -16,25 +16,27 @@ import {
   FormMessage,
 } from "./ui/form";
 
-const registrationSchema = z.object({
-  username: z.string().min(3, "Username must be at least 3 characters"),
-  email: z.string().email("Invalid email address"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-    .regex(/[0-9]/, "Password must contain at least one number"),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+const registrationSchema = z
+  .object({
+    name: z.string().min(1, "Name is required"),
+    email: z.string().email("Invalid email address"),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+      .regex(/[0-9]/, "Password must contain at least one number"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 type RegistrationData = z.infer<typeof registrationSchema>;
 
 interface RegistrationProps {
-  onRegister: (data: { email: string; password: string; username: string }) => void;
+  onRegister: (data: { name: string; email: string; password: string }) => void;
 }
 
 export default function Registration({ onRegister }: RegistrationProps) {
@@ -45,7 +47,7 @@ export default function Registration({ onRegister }: RegistrationProps) {
   const form = useForm<RegistrationData>({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
-      username: "",
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -55,9 +57,11 @@ export default function Registration({ onRegister }: RegistrationProps) {
   const onSubmit = async (data: RegistrationData) => {
     try {
       setIsLoading(true);
-      const { confirmPassword, ...registrationData } = data;
-      onRegister(registrationData);
-      toast.success("Registration successful! Please login.");
+      onRegister({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
       form.reset();
     } catch (error) {
       toast.error("Registration failed. Please try again.");
@@ -67,26 +71,26 @@ export default function Registration({ onRegister }: RegistrationProps) {
   };
 
   return (
-    <Card className="w-[90%] max-w-[500px] mx-auto mt-10 bg-gradient-to-r from-blue-50 to-indigo-50">
+    <Card className="max-w-[500px] mx-auto">
       <CardHeader>
-        <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-600 text-transparent bg-clip-text animate-gradient">
-          Register for Todo App
+        <CardTitle className="text-2xl text-center">
+          Create an Account
         </CardTitle>
-        <p className="text-center text-gray-600 mt-2 font-medium">
-          Create your account to manage your tasks
-        </p>
+        <CardDescription className="text-center">
+          Sign up to start managing your tasks
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="username"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter username" {...field} />
+                    <Input placeholder="Enter your name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -124,13 +128,13 @@ export default function Registration({ onRegister }: RegistrationProps) {
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8"
+                        className="absolute right-0 top-0 h-full px-3"
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? (
-                          <EyeOff className="h-4 w-4 text-gray-500" />
+                          <EyeOff className="h-4 w-4" />
                         ) : (
-                          <Eye className="h-4 w-4 text-gray-500" />
+                          <Eye className="h-4 w-4" />
                         )}
                       </Button>
                     </div>
@@ -157,13 +161,13 @@ export default function Registration({ onRegister }: RegistrationProps) {
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8"
+                        className="absolute right-0 top-0 h-full px-3"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       >
                         {showConfirmPassword ? (
-                          <EyeOff className="h-4 w-4 text-gray-500" />
+                          <EyeOff className="h-4 w-4" />
                         ) : (
-                          <Eye className="h-4 w-4 text-gray-500" />
+                          <Eye className="h-4 w-4" />
                         )}
                       </Button>
                     </div>
@@ -175,10 +179,10 @@ export default function Registration({ onRegister }: RegistrationProps) {
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white"
+              className="w-full"
               disabled={isLoading}
             >
-              {isLoading ? "Registering..." : "Register"}
+              {isLoading ? "Creating account..." : "Register"}
             </Button>
           </form>
         </Form>

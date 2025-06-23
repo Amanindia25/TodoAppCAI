@@ -8,15 +8,15 @@ import { Toaster, toast } from "sonner";
 
 interface User {
   email: string;
-  username: string;
+  name: string;
 }
 
 function App() {
   const [view, setView] = useState<"login" | "register" | "todo">("register");
   const [user, setUser] = useState<User | null>(null);
-  const [registeredUsers, setRegisteredUsers] = useState<{ email: string; password: string; username: string; }[]>([]);
+  const [registeredUsers, setRegisteredUsers] = useState<{ email: string; password: string; name: string; }[]>([]);
 
-  const handleRegistration = (data: { email: string; password: string; username: string; }) => {
+  const handleRegistration = (data: { email: string; password: string; name: string; }) => {
     setRegisteredUsers([...registeredUsers, data]);
     setView("login");
   };
@@ -27,9 +27,9 @@ function App() {
     );
 
     if (foundUser) {
-      setUser({ email: foundUser.email, username: foundUser.username });
+      setUser({ email: foundUser.email, name: foundUser.name });
       setView("todo");
-      toast.success(`Welcome back, ${foundUser.username}!`);
+      toast.success(`Welcome back, ${foundUser.name}!`);
     } else {
       toast.error("Invalid email or password");
     }
@@ -48,7 +48,7 @@ function App() {
           <div>
             <div className="flex justify-between items-center mb-8">
               <div className="text-lg font-medium text-gray-700">
-                Welcome, {user.username}!
+                Welcome, {user.name}!
               </div>
               <Button
                 onClick={handleLogout}
@@ -58,7 +58,7 @@ function App() {
                 Logout
               </Button>
             </div>
-            <Todo username={user.username} />
+            <Todo name={user.name} />
           </div>
         ) : (
           <>
@@ -66,14 +66,12 @@ function App() {
               <Button
                 onClick={() => setView("register")}
                 variant={view === "register" ? "default" : "outline"}
-                className={view === "register" ? "bg-gradient-to-r from-blue-500 to-indigo-500" : ""}
               >
                 Register
               </Button>
               <Button
                 onClick={() => setView("login")}
                 variant={view === "login" ? "default" : "outline"}
-                className={view === "login" ? "bg-gradient-to-r from-purple-500 to-pink-500" : ""}
                 disabled={registeredUsers.length === 0}
               >
                 Login

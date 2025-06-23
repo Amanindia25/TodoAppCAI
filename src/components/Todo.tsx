@@ -11,10 +11,10 @@ interface TodoItem {
 }
 
 interface TodoProps {
-  username: string;
+  name: string;
 }
 
-export default function Todo({ username }: TodoProps) {
+export default function Todo({ name }: TodoProps) {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [newTodo, setNewTodo] = useState("");
 
@@ -40,10 +40,10 @@ export default function Todo({ username }: TodoProps) {
   };
 
   return (
-    <Card className="w-[90%] max-w-[600px] mx-auto mt-10 bg-gradient-to-r from-purple-50 to-pink-50">
+    <Card className="max-w-[600px] mx-auto">
       <CardHeader>
-        <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-rose-500 via-fuchsia-500 to-indigo-500 text-transparent bg-clip-text animate-gradient">
-          {username}'s Todo List
+        <CardTitle className="text-2xl text-center">
+          {name}'s Todo List
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -53,30 +53,25 @@ export default function Todo({ username }: TodoProps) {
             value={newTodo}
             onChange={(e) => setNewTodo(e.target.value)}
             onKeyPress={handleKeyPress}
-            className="border-2 border-purple-200 focus:border-purple-400"
           />
-          <Button 
-            onClick={addTodo}
-            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
-          >
+          <Button onClick={addTodo}>
             Add
           </Button>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           {todos.map((todo) => (
             <div
               key={todo.id}
-              className="flex items-center justify-between p-3 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
+              className="flex items-center justify-between p-3 border rounded-md"
             >
-              <span className="text-gray-700">{todo.text}</span>
+              <span>{todo.text}</span>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => deleteTodo(todo.id)}
-                className="text-gray-500 hover:text-red-500 hover:bg-red-50"
               >
-                <Trash2 className="h-5 w-5" />
+                <Trash2 className="h-4 w-4" />
               </Button>
             </div>
           ))}

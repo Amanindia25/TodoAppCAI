@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Eye, EyeOff } from "lucide-react";
@@ -52,14 +52,14 @@ export default function Login({ onLogin }: LoginProps) {
   };
 
   return (
-    <Card className="w-[90%] max-w-[500px] mx-auto mt-10 bg-gradient-to-r from-purple-50 to-pink-50">
+    <Card className="max-w-[500px] mx-auto">
       <CardHeader>
-        <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-rose-500 via-fuchsia-500 to-indigo-500 text-transparent bg-clip-text animate-gradient">
+        <CardTitle className="text-2xl text-center">
           Login to Todo App
         </CardTitle>
-        <p className="text-center text-gray-600 mt-2 font-medium">
+        <CardDescription className="text-center">
           Welcome back! Please login to your account
-        </p>
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -95,13 +95,13 @@ export default function Login({ onLogin }: LoginProps) {
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8"
+                        className="absolute right-0 top-0 h-full px-3"
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? (
-                          <EyeOff className="h-4 w-4 text-gray-500" />
+                          <EyeOff className="h-4 w-4" />
                         ) : (
-                          <Eye className="h-4 w-4 text-gray-500" />
+                          <Eye className="h-4 w-4" />
                         )}
                       </Button>
                     </div>
@@ -113,7 +113,7 @@ export default function Login({ onLogin }: LoginProps) {
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
+              className="w-full"
               disabled={isLoading}
             >
               {isLoading ? "Logging in..." : "Login"}
