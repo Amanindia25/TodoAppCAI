@@ -4,7 +4,7 @@ import Todo from "./components/Todo";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
 import { Button } from "./components/ui/button";
-import { Toaster } from "sonner";
+import { Toaster, toast } from "sonner";
 
 interface User {
   email: string;
@@ -29,12 +29,16 @@ function App() {
     if (foundUser) {
       setUser({ email: foundUser.email, username: foundUser.username });
       setView("todo");
+      toast.success(`Welcome back, ${foundUser.username}!`);
+    } else {
+      toast.error("Invalid email or password");
     }
   };
 
   const handleLogout = () => {
     setUser(null);
     setView("login");
+    toast.success("Logged out successfully");
   };
 
   return (
@@ -54,7 +58,7 @@ function App() {
                 Logout
               </Button>
             </div>
-            <Todo />
+            <Todo username={user.username} />
           </div>
         ) : (
           <>

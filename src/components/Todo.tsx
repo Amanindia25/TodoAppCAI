@@ -10,7 +10,11 @@ interface TodoItem {
   text: string;
 }
 
-export default function Todo() {
+interface TodoProps {
+  username: string;
+}
+
+export default function Todo({ username }: TodoProps) {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [newTodo, setNewTodo] = useState("");
 
@@ -38,8 +42,8 @@ export default function Todo() {
   return (
     <Card className="w-[90%] max-w-[600px] mx-auto mt-10 bg-gradient-to-r from-purple-50 to-pink-50">
       <CardHeader>
-        <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 text-transparent bg-clip-text">
-          My Todo List
+        <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-rose-500 via-fuchsia-500 to-indigo-500 text-transparent bg-clip-text animate-gradient">
+          {username}'s Todo List
         </CardTitle>
       </CardHeader>
       <CardContent>
