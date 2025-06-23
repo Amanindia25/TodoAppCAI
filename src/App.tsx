@@ -3,7 +3,7 @@ import './App.css'
 import Todo from "./components/Todo";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
-import { Button } from "@/components/ui/button";
+import { Button } from "./components/ui/button";
 import { Toaster } from "sonner";
 
 interface User {
